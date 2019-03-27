@@ -2,10 +2,10 @@ import serial
 import time
 import datetime 
 import platform
+import os
+from shutil import copyfile
 
 ts = time.time()
-stamp = datetime.datetime.fromtimestamp(ts).strftime('%d-%m-%Y %H:%M:%S')
-logFileName = stamp + '.txt'
 
 def decisaoParaNumero(decisao):
     if decisao == "Alta":
@@ -19,11 +19,24 @@ def decisaoParaNumero(decisao):
 
 if platform.system() == "Windows":
     ser = serial.Serial('COM15', 9600, timeout=0)
+    stamp = datetime.datetime.fromtimestamp(ts).strftime('%d-%m-%Y %H-%M-%S')
+
+
 if platform.system() == "Linux":
     ser = serial.Serial('/dev/ttyUSB0', 9600)
+    stamp = datetime.datetime.fromtimestamp(ts).strftime('%d-%m-%Y %H:%M:%S')
 
+try:
+    os.remove('lastplot.plt')
+except FileNotFoundError:
+    print('')
+
+copyfile('plot.dol','lastplot.plt')
+logFileName = stamp + '.log'
 fileLog = open (logFileName, 'at') 
 fileLog.write("TEMP DECISION SECONDS\n")
+plotfileInjectLogfile = open ('lastplot.plt','at')
+plotfileInjectLogfile.write("plot '"+ logFileName +"' using 3:1, '' using 3:2 \n" + "pause -1" )
 
 minima = 29.60
 maxima = 31.00
