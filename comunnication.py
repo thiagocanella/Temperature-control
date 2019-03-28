@@ -50,18 +50,18 @@ while 1:
         leitura = str(temp)[2:7] 
         temperatura = float(temp)
      
-        if temperatura <= minima:
-            decisao = "Alta"
-            ser.write(b'H')
-     
-        if temperatura  > minima :
-            if  temperatura  <= maxima:
-                decisao = "Baixa"
-                ser.write(b'L')
-                             
-        if temperatura > maxima:
+        if iterationCounter < 900:
+            #decisao = "Alta"
+            #ser.write(b'H')
+            decisao = "Baixa"
+            ser.write(b'L')
+        else:
             decisao = "Nula"
-            ser.write(b'N') 
+            ser.write(b'N')
+
+
+             
+ 
 
         decisaoOut = decisaoParaNumero(decisao)
         texto = str(leitura) + " " + str(decisaoOut) + " " + str(iterationCounter)  
@@ -73,3 +73,5 @@ while 1:
           
     iterationCounter = iterationCounter + 1
     time.sleep(1)
+    if iterationCounter > 3600:
+        break
