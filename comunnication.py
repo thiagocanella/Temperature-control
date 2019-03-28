@@ -38,8 +38,8 @@ fileLog.write("TEMP DECISION SECONDS\n")
 plotfileInjectLogfile = open ('lastplot.plt','at')
 plotfileInjectLogfile.write("plot '"+ logFileName +"' using 3:1, '' using 3:2 \n" + "pause -1" )
 
-minima = 29.60
-maxima = 31.00
+minima = 29.00
+maxima = 33.00
 
 iterationCounter = 1
 
