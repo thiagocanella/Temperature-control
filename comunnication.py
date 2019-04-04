@@ -9,8 +9,8 @@ ts = time.time()
 
 
 #DEFINIÇÕES DO EXPERIMENTO
-minima = 33.00
-maxima = 36.00
+minima = 43.00
+maxima = 48.00
 horasDeExperimento = 4
 minutosDeExperimento = 0
 #----------------------------
