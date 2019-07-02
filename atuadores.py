@@ -36,16 +36,6 @@ def decodeData(encodedInt , match):
         return portinholaValue
     return 0
 
-""" def triacCalc(temperatura):
-    proporcional = 0
-    proporcional = proporcionalCalc(temperatura)
-    if proporcional < 0:
-        proporcional = 0
-    if proporcional > 1:
-        proporcional = 1
-    power = int(proporcional * 100)
-    saidainteira = int((255/100)*power)
-    return saidainteira """
 
 def triacPidCalc(pidIn):
     saidainteira = 0
@@ -62,7 +52,7 @@ def coolerPidCalc(pidIn):
     if pidIn > 0:
         return saidainteira
     else:
-        power != pidIn
+        power = pidIn - 2*pidIn
 
     if power <= 100 and power > 74:
         saidainteira = 79
@@ -75,67 +65,18 @@ def coolerPidCalc(pidIn):
 
     return saidainteira 
 
-
-""" def coolerCalc(temperatura):
-    proporcional = 0
-    proporcional = proporcionalCalc(temperatura)
-    
-    if proporcional < -1:
-        proporcional = -1
-    if proporcional > 1:
-        proporcional = 1
-    
-    power = int( proporcional   * 100)
-    
-    if power <= 100 and power > 74:
-        saidainteira = 19
-    elif power <= 74 and power >49:
-        saidainteira = 39
-    elif power <= 49 and power >24:
-        saidainteira = 59
-    else:
-        saidainteira = 79
-
-    return saidainteira """
-
-""" def portinholaCalc(temperatura):
-    proporcional = 0
-    proporcional = proporcionalCalc(temperatura)
-    
-    if proporcional < -1:
-        proporcional = -1
-    if proporcional > 1:
-        proporcional = 1
-    
-    power = int( proporcional * 100)
-    
-    if power <= 100 and power > 9:
-        saidainteira = 0
-    elif power <= 9 and power >-20:
-        saidainteira = 11
-    elif power <= -20 and power >-50:
-        saidainteira = 22
-    else:
-        saidainteira = 45
-
-    return saidainteira """
-
 def portinholaPidCalc(pidIn):
     saidainteira = 0
     power = 0
     if pidIn > 0:
         return saidainteira
     else:
-        power != pidIn
+        power = pidIn - 2*pidIn
     
-    saidainteira = int((power /100) * 45)
+    saidainteira = int(float(power /100) * 45)
 
     return saidainteira
 
-
-""" def proporcionalCalc(entrada):
-    saida = kp * (alvo - entrada)
-    return saida """
 
 def processorFuncion(pidResult):
    

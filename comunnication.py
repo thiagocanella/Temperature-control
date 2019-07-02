@@ -12,12 +12,9 @@ ts = time.time()
 
 
 #DEFINIÇÕES DO EXPERIMENTO
-alvo = 28.00
-kp = 0.4
 horasDeExperimento = 4
 minutosDeExperimento = 0
 #----------------------------
-
 
 
 
