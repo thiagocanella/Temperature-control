@@ -5,8 +5,9 @@ import platform
 import os
 import math
 from shutil import copyfile
-import pidprocess
 import atuadores
+import PID
+
 ts = time.time()
 
 
@@ -15,10 +16,17 @@ ts = time.time()
 horasDeExperimento = 4
 minutosDeExperimento = 0
 #----------------------------
+alvo = 28
 
 
 
 
+#PIDSETUP
+P = 5
+I = 3
+D = 1
+pid = PID.PID(P, I, D)
+pid.SetPoint = alvo
 
 
 #MONTA ARQUIVO DE LOG
@@ -29,9 +37,9 @@ except FileNotFoundError:
 copyfile('plot.dol','lastplot.plt')
 logFileName = atuadores.stamp + '.log'
 fileLog = open (logFileName, 'at') 
-fileLog.write("TEMP DECISION SECONDS\n")
+fileLog.write("TEMP TRIAC COOLER WINDOW SECONDS\n")
 plotfileInjectLogfile = open ('lastplot.plt','at')
-plotfileInjectLogfile.write("plot '"+ logFileName +"' using 3:1, '' using 3:2 \n" + "pause -1" )
+plotfileInjectLogfile.write("plot '"+ logFileName +"' using 5:1 \n" + "pause -1" )
 
 def tempoTotalEmSegundos(hora,minuto):
     return (hora * 3600) + (minuto * 60)
@@ -48,9 +56,12 @@ while 1:
         temp = atuadores.ser.readline()
         leitura = str(temp)[2:7] 
         temperatura = float(leitura)
-        pidprocess.pid.update(temperatura)
-        print (str(pidprocess.pid.output))
-        decisaoOut = atuadores.processorFuncion( int(pidprocess.pid.output) )
+        #pid.update(temperatura)
+        #print ("Decisao do PID " + str(pid.output))
+        #decisaoOut = atuadores.processorFuncion( int(pid.output) )
+
+        decisaoOut = atuadores.processorFuzzyFuncion(temperatura, alvo)
+
 
         texto = str(leitura) + " "+ str(decisaoOut) +" "+ str(iterationCounter)  
         print (texto)

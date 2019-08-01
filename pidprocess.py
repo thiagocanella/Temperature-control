@@ -3,8 +3,8 @@ import PID
 import time
 
 targetT = 28
-P = 10
-I = 1
+P = 5
+I = 3
 D = 1
 
 

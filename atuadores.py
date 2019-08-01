@@ -5,6 +5,8 @@ import datetime
 import platform
 import os
 import math
+import fuzzyprocess as fuzzyproc 
+
 
 ts = time.time()
 #CONFIGURAÇÕES DE PORTA COM E FORMATO DE DATA/HORA PELO SISTEMA OPERACIONAL
@@ -36,10 +38,13 @@ def decodeData(encodedInt , match):
         return portinholaValue
     return 0
 
-
+#START PID COMPUTING AREA
 def triacPidCalc(pidIn):
     saidainteira = 0
     power = int((255/100)*pidIn)
+    if power > 255:
+        power = 255
+
     if power < 0:
         saidainteira = 0
     else:
@@ -53,6 +58,8 @@ def coolerPidCalc(pidIn):
         return saidainteira
     else:
         power = pidIn - 2*pidIn
+    if power > 100:
+        power = 100
 
     if power <= 100 and power > 74:
         saidainteira = 79
@@ -62,7 +69,7 @@ def coolerPidCalc(pidIn):
         saidainteira = 39
     else:
         saidainteira = 19
-
+    power = power * 2
     return saidainteira 
 
 def portinholaPidCalc(pidIn):
@@ -72,7 +79,11 @@ def portinholaPidCalc(pidIn):
         return saidainteira
     else:
         power = pidIn - 2*pidIn
-    
+    if power > 100:
+        power = 100
+        
+    power = power * 2
+
     saidainteira = int(float(power /100) * 45)
 
     return saidainteira
@@ -87,6 +98,45 @@ def processorFuncion(pidResult):
     arduinoSerialWrite(serialOut)
     textOut = str( str(decodeData(serialOut, 1)) + " " + str(decodeData(serialOut, 2)) + " " + str(decodeData(serialOut, 3)) )
     return textOut
+
+#END PID COMPUTING ARE
+
+
+# START FUZZY COMPUTING AREA
+def processorFuzzyFuncion(temp, tgt):
+
+    triac = triacFuzzyCalc(fuzzyproc.calcularSaida(temp, tgt , 1))
+    cooler = coolerFuzzyCalc(fuzzyproc.calcularSaida(temp, tgt , 2))
+    portinhola = portinholaFuzzyCalc(fuzzyproc.calcularSaida(temp, tgt , 3))
+    serialOut = encoder(triac, cooler , portinhola)
+    arduinoSerialWrite(serialOut)
+    textOut = str( str(decodeData(serialOut, 1)) + " " + str(decodeData(serialOut, 2)) + " " + str(decodeData(serialOut, 3)) )
+    return textOut
+
+def triacFuzzyCalc(fuzzin):
+    power = 0
+    power = int((255/100)*fuzzin)
+    return power
+
+def coolerFuzzyCalc(fuzzin):
+    power = 0
+    if fuzzin <= 100 and fuzzin > 74:
+        power = 79
+    elif fuzzin <= 74 and fuzzin >49:
+        power = 59
+    elif fuzzin <= 49 and fuzzin >24:
+        power = 39
+    else:
+        power = 19
+    return power
+
+def portinholaFuzzyCalc(fuzzin):
+    power = 0
+    power = int(fuzzin)
+    return power
+
+#END FUZZY COMPUTING AREA
+
 
 def arduinoSerialWrite(dataIn):
     byteout = bytes(dataIn,  encoding="ascii")

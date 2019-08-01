@@ -1,7 +1,3 @@
-import numpy as np
-import skfuzzy as fuzz
-from skfuzzy import control as ctrl
-
 temperarura = ctrl.Antecedent(np.arange(0,100,1), 'temperatura')
 temperarura['muito frio'] = fuzz.trimf(temperarura.universe, [0,0,25])
 temperarura['frio'] = fuzz.trimf(temperarura.universe, [0,25,50])
@@ -34,21 +30,3 @@ regra2 = ctrl.Rule(temperarura['frio'] , ( lampada['fraco'] , ventilador['fraco'
 regra3 = ctrl.Rule(temperarura['bom'] , ( lampada['bem fraco'] , ventilador['forte'] , portinhola['pela metade']) )
 regra4 = ctrl.Rule(temperarura['quente'], ( lampada['desligado'] , ventilador['total'] , portinhola['quase aberta']) )
 regra5 = ctrl.Rule(temperarura['muito quente'], ( lampada['desligado'] , ventilador['total'] , portinhola['aberta']) )
-
-controleDeSaida = ctrl.ControlSystem([regra1, regra2, regra3, regra4, regra5])
-
-saida = ctrl.ControlSystemSimulation(controleDeSaida)
-
-def calcularSaida(temp,target, match):
-    errorby50 = float( 50 - (target - temp))
-
-    saida.input['temperatura'] = errorby50
-    saida.compute()
-    if match == 1:
-        return saida.output['lampada']
-    if match == 2:
-        return saida.output['ventilador']
-    if match == 3:
-        return saida.output['portinhola']
-    return
-    
