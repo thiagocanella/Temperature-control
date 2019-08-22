@@ -11,6 +11,7 @@ Servo portinholaMotor;
 const int coolerPin = 3;
 const int triacPin = 9;
 const int portinholaPin = 8;
+//teste
 
 bool flag = false;
 String serialBuffer = "0";
